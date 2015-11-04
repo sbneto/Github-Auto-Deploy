@@ -8,6 +8,7 @@ logging.basicConfig(filename='GitAutoDeploy.log', level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 CALLS = logging.getLogger().handlers[0].stream #open('GitAutoDeployCalls.log', 'a')
 
+
 class GitAutoDeploy(BaseHTTPRequestHandler):
 
     CONFIG_FILEPATH = './GitAutoDeploy.conf.json'
@@ -103,6 +104,12 @@ class GitAutoDeploy(BaseHTTPRequestHandler):
                     elif not self.quiet:
                         logging.info('Push to different branch (%s != %s), not deploying' % (branch, self.branch))
                 break
+
+    def log_message(self, format, *args):
+        logging.info("%s - - [%s] %s\n" %
+                     (self.client_address[0],
+                      self.log_date_time_string(),
+                      format%args))
 
 def main():
     try:
