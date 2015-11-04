@@ -6,7 +6,7 @@ from subprocess import call
 
 logging.basicConfig(filename='GitAutoDeploy.log', level=logging.DEBUG, 
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-CALLS = logging.getLogger().handlers[0] #open('GitAutoDeployCalls.log', 'a')
+CALLS = logging.getLogger().handlers[0].stream #open('GitAutoDeployCalls.log', 'a')
 
 class GitAutoDeploy(BaseHTTPRequestHandler):
 
