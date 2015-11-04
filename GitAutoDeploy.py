@@ -4,7 +4,9 @@ import json, urlparse, sys, os, logging
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 from subprocess import call
 
-logging.basicConfig(filename='GitAutoDeploy.log',level=logging.DEBUG)
+logging.basicConfig(filename='GitAutoDeploy.log', level=logging.DEBUG, 
+                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+CALLS = logging.getLogger().handlers[0] #open('GitAutoDeployCalls.log', 'a')
 
 class GitAutoDeploy(BaseHTTPRequestHandler):
 
@@ -82,7 +84,7 @@ class GitAutoDeploy(BaseHTTPRequestHandler):
         if(not self.quiet):
             logging.info("\nPost push request received")
             logging.info('Updating ' + path)
-        call(['cd "' + path + '" && git fetch'], shell=True)
+        call(['cd "' + path + '" && git fetch'], shell=True, stdout=CALLS, stderr=CALLS)
 
     def deploy(self, path):
         config = self.getConfig()
@@ -96,7 +98,7 @@ class GitAutoDeploy(BaseHTTPRequestHandler):
                     if branch is None or branch == self.branch:
                         if(not self.quiet):
                             logging.info('Executing deploy command')
-                        call(['cd "' + path + '" && ' + repository['deploy']], shell=True)
+                        call(['cd "' + path + '" && ' + repository['deploy']], shell=True, stdout=CALLS, stderr=CALLS)
                         
                     elif not self.quiet:
                         logging.info('Push to different branch (%s != %s), not deploying' % (branch, self.branch))
